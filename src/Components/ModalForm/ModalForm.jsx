@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, Formik } from 'formik';
 import { date, object, string } from 'yup';
 import PropTypes from 'prop-types';
+import { nanoid } from 'nanoid';
 
 import {
   ModalContainer,
@@ -18,7 +19,7 @@ import cities from '../../cities';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { addDays, differenceInCalendarDays } from 'date-fns';
+import { format, addDays, differenceInCalendarDays } from 'date-fns';
 
 let tripSchema = object({
   city: string().required('City is a required field'),
@@ -40,7 +41,7 @@ let tripSchema = object({
     ),
 });
 
-const ModalForm = ({ onClose }) => {
+const ModalForm = ({ onClose, onSubmit }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -50,14 +51,26 @@ const ModalForm = ({ onClose }) => {
     end: null,
   };
 
+  const formatDate = (date) => {
+    return format(date, 'yyyy-MM-dd');
+  };
+
   const handleSubmit = (values, { resetForm }) => {
-    // Обробка події подачі форми
+    const id = nanoid();
+    const formattedValues = {
+      ...values,
+      start: formatDate(values.start),
+      end: formatDate(values.end),
+      id,
+    };
     console.log(values);
+    onSubmit(formattedValues);
     resetForm();
     setStartDate(null);
     setEndDate(null);
     onClose();
   };
+
   const handleCancel = (resetForm) => {
     resetForm();
     setStartDate(null);
@@ -180,6 +193,7 @@ const ModalForm = ({ onClose }) => {
 };
 ModalForm.propTypes = {
   onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ModalForm;
