@@ -63,7 +63,6 @@ const ModalForm = ({ onClose, onSubmit }) => {
       end: formatDate(values.end),
       id,
     };
-    console.log(values);
     onSubmit(formattedValues);
     resetForm();
     setStartDate(null);
@@ -108,7 +107,7 @@ const ModalForm = ({ onClose, onSubmit }) => {
                     </option>
                     {cities.map((city) => (
                       <option key={city.id} value={city.name}>
-                        {city.name}
+                        {city.name.charAt(0).toUpperCase() + city.name.slice(1)}
                       </option>
                     ))}
                   </StyledSelect>
