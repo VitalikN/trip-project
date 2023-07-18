@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import {  useState } from 'react';
 import { WeatherWeek } from '../Components/WeatherWeek/WeatherWeek';
 import { daysOfWeek } from '../daysOfWeek';
-import { Main, ContainerWeek, ContainerDay } from './MainPage.styled';
+import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, Btn} from './MainPage.styled';
 import { useGetWeatherDataQuery } from '../redux/weatherApi';
+
+import { Formik } from 'formik';
+import { Timer } from '../Components/Timer/Timer';
+import {icons} from '../icons'
+import { AiOutlineSearch } from "react-icons/ai";
+
 
 const MainPage = () => {
   const [weatherData, setWeatherData] = useState([]);
@@ -17,40 +23,67 @@ const MainPage = () => {
   const handleFormSubmit = (selectedData) => {
     setWeatherData((prevWeatherData) => [...prevWeatherData, selectedData]);
     setDataCity(selectedData);
+   
   };
   const { data, error, isLoading } = useGetWeatherDataQuery(dataCity.city, {
     skip: !dataCity.city,
   });
 
-  console.log(weatherData);
-
+   console.log(dataCity);
   return (
     <Main>
       <ContainerWeek>
-        <h1>
-          <span>Weather</span> Forecast
-        </h1>
-        <input type="text" />
+        <TitleTrip>
+          <TitleChip>Weather</TitleChip> Forecast
+        </TitleTrip>
+        <Formik
+          initialValues={{ searchTerm: '' }}
+        >
+         
+            <StyledForm>
+              <StyledField
+                type="text"
+                name="searchTerm"
+                placeholder='Search your trip'
+              
+              />
+              <Btn type="submit" >
+              <AiOutlineSearch/>
+              </Btn>
+            </StyledForm>
+          
+        </Formik>
         <WeatherWeek
           handleItemClick={handleItemClick}
           handleFormSubmit={handleFormSubmit}
           weatherData={weatherData}
-          dataCity={dataCity}
+              dataCity={dataCity}
         />
       </ContainerWeek>
       <ContainerDay>
+          
         {dataCity && (
           <>
-            <h2>{dayOfWeek}</h2>
+            <TitleDay>{dayOfWeek}</TitleDay>
+            
             {data && (
-              <p style={{ position: 'relative', top: '-0.5em' }}>
+              <ContainerData>
+                <Box>
+                <img width='70px' height='70px' src={icons.find((i) => i.icon === data.days[0].icon)?.path}/>
+          
+              <TextTemp >
                 {data.days[0].temp}
-                <sup style={{ fontSize: '0.9em' }}>°C</sup>
-              </p>
-            )}
-            <h3>
+                <Sup >°C</Sup>
+              </TextTemp>
+              </Box>
+            <TitleCity>
               {dataCity.city.charAt(0).toUpperCase() + dataCity.city.slice(1)}
-            </h3>
+            </TitleCity>
+
+            </ContainerData>  )}
+
+<Timer dataCity={dataCity}/>
+
           </>
         )}
       </ContainerDay>

@@ -131,7 +131,7 @@ export const Btn = styled.button`
 
 export const ListWeather = styled.ul`
   display: flex;
-  gap: 15px;
+  gap: 20px;
   list-style: none;
   align-items: center;
 
@@ -159,10 +159,18 @@ export const ListWeather = styled.ul`
   }
 `;
 
+
+export const ItemIcons = styled.li`
+display: flex;
+flex-direction: column;
+gap: 15px;
+`
+
+
 export const TextTemp = styled.p`
   font-size: 12px;
   font-weight: 400;
   color: #535252;
-  padding: 5px 10px;
+  padding: 0 5px;
   line-height: 1.15;
 `;

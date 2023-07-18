@@ -13,7 +13,6 @@ import { weatherApi } from './weatherApi';
 const store = configureStore({
   reducer: {
     [weatherApi.reducerPath]: weatherApi.reducer,
-    // Додайте інші редюсери сюди, якщо є
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
