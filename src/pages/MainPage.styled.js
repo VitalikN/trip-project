@@ -106,7 +106,10 @@ position: absolute;
     font-size: 20px;
     padding-top: 12px;
     padding-left: 15px;
+`;
 
-
-
+export const Error = styled.p`
+  color: red;
+  font-size: 20px;
+  margin: 10px;
 `;

@@ -22,7 +22,9 @@
     Text,
     ListWeather,
     TextTemp,
+    Error,
   } from './WeatherWeek.styled';
+import { Loader } from '../Loader/Loader';
 
   export const WeatherWeek = ({
     handleItemClick,
@@ -84,6 +86,13 @@
         </Box>
         {showModal && <Modal onClose={toggleModal} onSubmit={handleFormSubmit} />}
         {data && (
+   isLoading ? (
+    <Loader />
+  ) : error ? (
+    <Error>Error fetching weather data!</Error>
+  ) : data ? (
+
+
           <ListWeather>
             {data.days.map(({ datetime, tempmax, tempmin ,icon}, idx) => (
               <ItemIcons key={idx}>
@@ -99,7 +108,7 @@
               </ItemIcons>
             ))}
           </ListWeather>
-        )}
+        ) : null)}
       </Container>
     );
   };

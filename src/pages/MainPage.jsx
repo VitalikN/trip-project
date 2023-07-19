@@ -1,13 +1,21 @@
 import {  useState } from 'react';
 import { WeatherWeek } from '../Components/WeatherWeek/WeatherWeek';
 import { daysOfWeek } from '../daysOfWeek';
-import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, Btn} from './MainPage.styled';
+import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, Btn, Error} from './MainPage.styled';
 import { useGetWeatherDataQuery } from '../redux/weatherApi';
 
 import { Formik } from 'formik';
 import { Timer } from '../Components/Timer/Timer';
 import {icons} from '../icons'
 import { AiOutlineSearch } from "react-icons/ai";
+import { Loader } from '../Components/Loader/Loader';
+
+
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+  searchTerm: Yup.string().required('Search term is required'),
+});
 
 
 const MainPage = () => {
@@ -37,8 +45,9 @@ const MainPage = () => {
           <TitleChip>Weather</TitleChip> Forecast
         </TitleTrip>
         <Formik
-          initialValues={{ searchTerm: '' }}
-        >
+       initialValues={{ searchTerm: '' }} onSubmit={(values) => console.log(values)}
+          validationSchema={validationSchema} >
+    
          
             <StyledForm>
               <StyledField
@@ -63,10 +72,15 @@ const MainPage = () => {
       <ContainerDay>
           
         {dataCity && (
-          <>
-            <TitleDay>{dayOfWeek}</TitleDay>
-            
-            {data && (
+          isLoading ? (
+          
+            <Loader /> 
+            ) : error ? (
+              <Error>Error fetching weather data!</Error>
+            ) : data ? (
+              <>
+              
+              <TitleDay>{dayOfWeek}</TitleDay>
               <ContainerData>
                 <Box>
                 <img width='70px' height='70px' src={icons.find((i) => i.icon === data.days[0].icon)?.path}/>
@@ -80,12 +94,13 @@ const MainPage = () => {
               {dataCity.city.charAt(0).toUpperCase() + dataCity.city.slice(1)}
             </TitleCity>
 
-            </ContainerData>  )}
-
-<Timer dataCity={dataCity}/>
-
-          </>
-        )}
+            </ContainerData>  
+            <Timer dataCity={dataCity}/>
+            </>):  (
+            <Error>Weather data not available!</Error>
+          )
+          
+          )}
       </ContainerDay>
     </Main>
   );

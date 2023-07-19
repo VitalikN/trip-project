@@ -174,3 +174,9 @@ export const TextTemp = styled.p`
   padding: 0 5px;
   line-height: 1.15;
 `;
+
+export const Error = styled.p`
+  color: red;
+  font-size: 20px;
+  margin: 10px;
+`;
