@@ -1,7 +1,7 @@
-import {  useState } from 'react';
+import {   useEffect, useState } from 'react';
 import { WeatherWeek } from '../Components/WeatherWeek/WeatherWeek';
 import { daysOfWeek } from '../daysOfWeek';
-import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, Btn, Error} from './MainPage.styled';
+import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, ChipIcon, Error} from './MainPage.styled';
 import { useGetWeatherDataQuery } from '../redux/weatherApi';
 
 import { Formik } from 'formik';
@@ -10,26 +10,49 @@ import {icons} from '../icons'
 import { AiOutlineSearch } from "react-icons/ai";
 import { Loader } from '../Components/Loader/Loader';
 
-
 import * as Yup from 'yup';
+import { getDataFromLocalStorage, saveDataToLocalStorage } from '../Components/localStorage/localStorage';
 
 const validationSchema = Yup.object().shape({
   searchTerm: Yup.string().required('Search term is required'),
 });
 
-
 const MainPage = () => {
-  const [weatherData, setWeatherData] = useState([]);
-  const [dataCity, setDataCity] = useState('');
+  const [weatherData, setWeatherData] = useState(() => getDataFromLocalStorage('weatherData', []))
+const [dataCity, setDataCity] = useState(() => getDataFromLocalStorage('dataCity', ""));
+const [filteredWeatherData, setFilteredWeatherData] = useState([]);
+const [search, setSearchTerm] = useState('');
 
-  const today = new Date();
-  const dayOfWeek = daysOfWeek[today.getDay()];
+const today = new Date();
+const dayOfWeek = daysOfWeek[today.getDay()];
+
+
+
+useEffect(() => {
+  saveDataToLocalStorage('weatherData', weatherData);
+  saveDataToLocalStorage('dataCity', dataCity);
+}, [weatherData, dataCity]);
+
+
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setSearchTerm(value);
+  
+    const filteredData = weatherData.filter(({ city }) =>
+      city.toLowerCase().includes(value.toLowerCase())
+    );
+  
+    console.log(filteredData);
+    setFilteredWeatherData(filteredData);
+  };
+
+
 
   const handleItemClick = (selectedData) => {
     setDataCity(selectedData);
   };
   const handleFormSubmit = (selectedData) => {
-    setWeatherData((prevWeatherData) => [...prevWeatherData, selectedData]);
+    setWeatherData((prevWeatherData) => ([...prevWeatherData, selectedData]));
     setDataCity(selectedData);
    
   };
@@ -37,36 +60,40 @@ const MainPage = () => {
     skip: !dataCity.city,
   });
 
-   console.log(dataCity);
+
   return (
     <Main>
       <ContainerWeek>
         <TitleTrip>
           <TitleChip>Weather</TitleChip> Forecast
         </TitleTrip>
-        <Formik
-       initialValues={{ searchTerm: '' }} onSubmit={(values) => console.log(values)}
-          validationSchema={validationSchema} >
-    
-         
+    {dataCity &&   <Formik
+       initialValues={{ searchTerm: '' }}
+       validationSchema={validationSchema}
+>         
+{({ handleChange, values }) => (
             <StyledForm>
               <StyledField
                 type="text"
                 name="searchTerm"
                 placeholder='Search your trip'
-              
+                value={values.searchTerm}
+                onChange={(e) => {
+                  handleChange(e);
+                  handleInputChange(e);
+                }}
               />
-              <Btn type="submit" >
+              <ChipIcon >
               <AiOutlineSearch/>
-              </Btn>
+              </ChipIcon>
             </StyledForm>
-          
-        </Formik>
+)}
+        </Formik>}  
         <WeatherWeek
           handleItemClick={handleItemClick}
           handleFormSubmit={handleFormSubmit}
-          weatherData={weatherData}
-              dataCity={dataCity}
+          weatherData={search ? filteredWeatherData : weatherData}
+          dataCity={dataCity}
         />
       </ContainerWeek>
       <ContainerDay>
@@ -86,7 +113,7 @@ const MainPage = () => {
                 <img width='70px' height='70px' src={icons.find((i) => i.icon === data.days[0].icon)?.path}/>
           
               <TextTemp >
-                {data.days[0].temp}
+                { Math.ceil(data.days[0].temp)}
                 <Sup >°C</Sup>
               </TextTemp>
               </Box>

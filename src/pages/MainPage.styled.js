@@ -98,7 +98,7 @@ export const StyledField = styled(Field)`
   letter-spacing: 1.14;
 `;
 
-export const Btn = styled.button`
+export const ChipIcon = styled.span`
 position: absolute;
  left: 0;
  border: none;

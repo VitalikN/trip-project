@@ -17,8 +17,50 @@ export const List = styled.ul`
 
 export const Item = styled.li`
   position: relative;
-
   cursor: pointer;
+
+
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 250%;
+    height: 100%;
+
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.8),
+      rgba(255, 255, 255, 0)
+    );
+    top: 0;
+    left: -250%;
+    transform: rotate(45deg);
+    transition: all 0.3s;
+    opacity: 0;
+  }
+
+  &:hover,
+  &:focus {
+    transform: translateY(-2px);
+    animation: pulseAnimation 1s ease-in-out infinite;
+  }
+
+  &:hover:before,
+  &:focus:before {
+    left: 100%;
+    opacity: 1;
+    transition: left 2s ease-in-out, opacity 0.3s ease-in-out;
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+
 `;
 
 export const Img = styled.img`
@@ -83,7 +125,7 @@ export const Btn = styled.button`
   &:before {
     content: '';
     position: absolute;
-    width: 240%;
+    width: 250%;
     height: 100%;
 
     background: linear-gradient(

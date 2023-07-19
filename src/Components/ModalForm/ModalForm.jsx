@@ -2,6 +2,8 @@ import { ErrorMessage, Field, Formik } from 'formik';
 import { date, object, string } from 'yup';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 
 import {
   ModalContainer,
@@ -40,6 +42,7 @@ let tripSchema = object({
       }
     ),
 });
+
 
 const ModalForm = ({ onClose, onSubmit }) => {
   const [startDate, setStartDate] = useState(null);
@@ -150,7 +153,7 @@ const ModalForm = ({ onClose, onSubmit }) => {
                 selected={endDate}
                 onChange={(selectedDate) => {
                   if (!startDate) {
-                    alert('Please select a start date first');
+                    Notify.info('Please select a start date first');
                     return;
                   }
 
@@ -158,7 +161,7 @@ const ModalForm = ({ onClose, onSubmit }) => {
                     selectedDate < startDate ||
                     selectedDate > addDays(startDate, 15)
                   ) {
-                    alert('Invalid end date');
+                    Notify.info('Invalid end date');
                     return;
                   }
 

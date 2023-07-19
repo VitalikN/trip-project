@@ -37,6 +37,17 @@ import { Loader } from '../Loader/Loader';
     const toggleModal = () => {
       setShowModal((prevShowModal) => !prevShowModal);
     };
+    const sortByDateAndCity = (a, b) => {
+      const dateA = new Date(a.start);
+      const dateB = new Date(b.start);
+    
+      if (dateA.getTime() !== dateB.getTime()) {
+        return dateA - dateB;
+      } else {
+        return a.city.localeCompare(b.city, 'en', { sensitivity: 'base' });
+      }
+    };
+    const sortedWeatherData = [...weatherData].sort(sortByDateAndCity);
 
         
     const { data, error, isLoading } = useGetCustomWeatherDataQuery(
@@ -47,13 +58,12 @@ import { Loader } from '../Loader/Loader';
       },
       { skip: !dataCity.city ?? dataCity.start ?? dataCity.end }
     );
-    console.log(weatherData);
 
     return (
       <Container>
         <Box>
           <List>
-            {weatherData.map(({ id, city, start, end }) => (
+            {sortedWeatherData.map(({ id, city, start, end }) => (
               <Item
                 key={id}
                 onClick={() => handleItemClick({ city, start, end })}
@@ -103,7 +113,7 @@ import { Loader } from '../Loader/Loader';
                 </Text>
                 <img width='60px' height='60px' src={icons.find((i) => i.icon === icon)?.path}/>
                 <TextTemp>
-                  {tempmax}/{tempmin}
+                  {Math.ceil(tempmax)}/{Math.ceil(tempmin)}
                 </TextTemp>
               </ItemIcons>
             ))}

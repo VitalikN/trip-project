@@ -1,7 +1,5 @@
 import styled from "@emotion/styled";
-/***
- * Ball loader
- */
+
 export const Container = styled.div`
   position: fixed;
   top: 0;
