@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+
 import {
   ModalContainer,
   Box,
@@ -65,6 +66,7 @@ const ModalForm = ({ onClose, onSubmit }) => {
       end: formatDate(values.end),
       id,
     };
+    Notify.success("New trip successfully added");
     onSubmit(formattedValues);
     resetForm();
     setStartDate(null);

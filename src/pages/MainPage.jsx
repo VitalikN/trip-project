@@ -1,7 +1,7 @@
 import {   useEffect, useState } from 'react';
 import { WeatherWeek } from '../Components/WeatherWeek/WeatherWeek';
 import { daysOfWeek } from '../daysOfWeek';
-import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, ChipIcon, Error} from './MainPage.styled';
+import { Main,TitleTrip,TitleChip, ContainerWeek,ContainerData, TitleDay, Box, TitleCity,TextTemp, ContainerDay, StyledForm, StyledField,Sup, ChipIcon, Error,BoxLink, IconLinkedin, IconGithub, TitleDev} from './MainPage.styled';
 import { useGetWeatherDataQuery } from '../redux/weatherApi';
 
 import { Formik } from 'formik';
@@ -13,6 +13,7 @@ import { Loader } from '../Components/Loader/Loader';
 import * as Yup from 'yup';
 import { getDataFromLocalStorage, saveDataToLocalStorage } from '../Components/localStorage/localStorage';
 import { nanoid } from 'nanoid';
+import { Link } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
   searchTerm: Yup.string().required('Search term is required'),
@@ -106,6 +107,18 @@ useEffect(() => {
           dataCity={dataCity}
           filteredWeatherData={filteredWeatherData} 
         />
+        <BoxLink>
+
+        <Link to="https://vitalikn.github.io/trip-project" target="_blank">
+  <IconGithub/>
+</Link>
+      <TitleDev>created by <span>&copy;</span> Vitaly Nozhenko</TitleDev> 
+ 
+<Link to="https://www.linkedin.com/in/vitalii-nozhenko/" target="_blank">
+<IconLinkedin/>
+</Link>
+        </BoxLink>
+        
       </ContainerWeek>
       <ContainerDay>
           
@@ -140,6 +153,7 @@ useEffect(() => {
           
           )}
       </ContainerDay>
+     
     </Main>
   );
 };

@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 
 import { Form, Field } from 'formik';
 
+import { AiFillGithub, AiFillLinkedin } from "react-icons/ai";
+
 
 export const Main = styled.main`
   display: flex;
@@ -91,7 +93,6 @@ export const StyledField = styled(Field)`
   align-items: center;
   border-radius: 8px;
   border: none;
-  /* opacity: 0.4; */
   background-color: #f2f4f8;
   box-shadow: 0px 1px 10px 0px;
   font-size: 14px;
@@ -112,4 +113,33 @@ export const Error = styled.p`
   color: red;
   font-size: 20px;
   margin: 10px;
+`;
+export const BoxLink = styled.div`
+position: absolute;
+bottom: 10px;
+width: 55%;
+
+display: flex;
+justify-content:space-evenly;
+align-items:center ;
+`;
+
+export const TitleDev = styled.h3`
+ font-size: 15px;
+  font-weight: 300;
+  line-height: 1.15;
+  padding-bottom: 8px;
+`;
+
+export const IconGithub = styled(AiFillGithub)`
+font-size:20px;
+color: #4678ee;
+cursor: pointer;
+`;
+
+export const IconLinkedin = styled(AiFillLinkedin)`
+color: #4678ee;
+font-size:20px;
+cursor: pointer;
+border-radius:20px; 
 `;
