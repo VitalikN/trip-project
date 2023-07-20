@@ -1,26 +1,77 @@
 import styled from '@emotion/styled';
+
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+
+
+export const StyledArrowLeft = styled(AiOutlineArrowLeft)`
+font-size: 20px;
+padding: 10px;
+cursor: pointer;
+color: #4678ee;
+margin-right: 20px;
+`;
+
+export const StyledArrowRight = styled(AiOutlineArrowRight)`
+font-size: 20px;
+padding: 10px;
+cursor: pointer;
+color: #4678ee;
+margin-left: 20px;
+
+`;
+
 export const Container = styled.div`
   padding-top: 30px;
 `;
 export const Box = styled.div`
+
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 15px;
   margin-bottom: 70px;
 `;
+
+
 
 export const List = styled.ul`
   display: flex;
   gap: 15px;
   list-style: none;
   align-items: center;
+  overflow-x: auto;
 `;
+
+export const BoxArrow = styled.div`
+position: relative;
+display: flex;
+justify-content: center;
+align-items:center ;
+`;
+
+export const Dots = styled.div`
+position: absolute;
+bottom: -20px;
+  display: flex;
+  justify-content: center;
+`;
+
+export const Dot = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: ${(props) => (props.active ? '#4678ee' : 'gray')};
+  margin: 0 6px;
+  cursor: pointer;
+`;
+
+
 
 export const Item = styled.li`
   position: relative;
   cursor: pointer;
 
 
-  position: relative;
   overflow: hidden;
   transition: all 0.3s;
 

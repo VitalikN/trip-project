@@ -12,14 +12,25 @@ import { Loader } from '../Components/Loader/Loader';
 
 import * as Yup from 'yup';
 import { getDataFromLocalStorage, saveDataToLocalStorage } from '../Components/localStorage/localStorage';
+import { nanoid } from 'nanoid';
 
 const validationSchema = Yup.object().shape({
   searchTerm: Yup.string().required('Search term is required'),
 });
 
+const initialState = 
+  {
+    id: nanoid(),
+    city: "uzhhorod",
+    start: "2023-08-01",
+    end: "2023-08-02",
+  }
+
+
+
 const MainPage = () => {
-  const [weatherData, setWeatherData] = useState(() => getDataFromLocalStorage('weatherData', []))
-const [dataCity, setDataCity] = useState(() => getDataFromLocalStorage('dataCity', ""));
+  const [weatherData, setWeatherData] = useState(() => getDataFromLocalStorage('weatherData', [initialState]))
+const [dataCity, setDataCity] = useState(() => getDataFromLocalStorage('dataCity', initialState));
 const [filteredWeatherData, setFilteredWeatherData] = useState([]);
 const [search, setSearchTerm] = useState('');
 
@@ -42,7 +53,6 @@ useEffect(() => {
       city.toLowerCase().includes(value.toLowerCase())
     );
   
-    console.log(filteredData);
     setFilteredWeatherData(filteredData);
   };
 
@@ -59,7 +69,7 @@ useEffect(() => {
   const { data, error, isLoading } = useGetWeatherDataQuery(dataCity.city, {
     skip: !dataCity.city,
   });
-
+  
 
   return (
     <Main>
@@ -94,6 +104,7 @@ useEffect(() => {
           handleFormSubmit={handleFormSubmit}
           weatherData={search ? filteredWeatherData : weatherData}
           dataCity={dataCity}
+          filteredWeatherData={filteredWeatherData} 
         />
       </ContainerWeek>
       <ContainerDay>

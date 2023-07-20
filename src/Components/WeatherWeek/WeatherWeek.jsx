@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-  import { useState } from 'react';
+  import {  useEffect, useState } from 'react';
   import { AiOutlinePlus } from 'react-icons/ai';
   import { useGetCustomWeatherDataQuery } from '../../redux/weatherApi';
 
@@ -17,12 +17,16 @@
     Img,
     BoxText,
     TitleCity,
-    
+    BoxArrow,
     ItemIcons,
     Text,
     ListWeather,
     TextTemp,
     Error,
+    Dots,
+    Dot,
+    StyledArrowRight,
+    StyledArrowLeft,
   } from './WeatherWeek.styled';
 import { Loader } from '../Loader/Loader';
 
@@ -31,6 +35,7 @@ import { Loader } from '../Loader/Loader';
     handleFormSubmit,
     weatherData,
     dataCity,
+    filteredWeatherData,
   }) => {
     const [showModal, setShowModal] = useState(false);
 
@@ -47,9 +52,15 @@ import { Loader } from '../Loader/Loader';
         return a.city.localeCompare(b.city, 'en', { sensitivity: 'base' });
       }
     };
-    const sortedWeatherData = [...weatherData].sort(sortByDateAndCity);
+    const sortedWeatherData = (filteredWeatherData.length > 0 ? [...filteredWeatherData] : [...weatherData]).sort(sortByDateAndCity);
+  
+    useEffect(() => {
+      if (activeIndex >= sortedWeatherData.length) {
+        setActiveIndex(0);
+      }
+    }, [filteredWeatherData,  sortedWeatherData.length]);    
 
-        
+
     const { data, error, isLoading } = useGetCustomWeatherDataQuery(
       {
         city: dataCity.city,
@@ -58,15 +69,34 @@ import { Loader } from '../Loader/Loader';
       },
       { skip: !dataCity.city ?? dataCity.start ?? dataCity.end }
     );
+    const [activeIndex, setActiveIndex] = useState(0);
 
+    const handlePreviousClick = () => {
+    setActiveIndex((prevIndex) => (prevIndex === 0 ? sortedWeatherData.length - 1 : prevIndex - 1));
+  };
+
+  const handleNextClick = () => {
+    setActiveIndex((prevIndex) => (prevIndex === sortedWeatherData.length - 1 ? 0 : prevIndex + 1));
+  };
+  
+  const handleDotClick = (index) => {
+    setActiveIndex(index);
+  };
+
+
+  
     return (
       <Container>
         <Box>
+        <BoxArrow>
+      {sortedWeatherData.length > 1 ?  <StyledArrowLeft  onClick={handlePreviousClick}/> : null} 
           <List>
-            {sortedWeatherData.map(({ id, city, start, end }) => (
+            {sortedWeatherData.map(({ id, city, start, end }, index ) => (
               <Item
                 key={id}
-                onClick={() => handleItemClick({ city, start, end })}
+                onClick={() => handleItemClick({ city, start, end } )}
+                style={{ display: index === activeIndex ? 'block' : 'none' }}
+  
               >
                 <Img
                   src={cities.find((image) => image.name === city)?.path}
@@ -89,6 +119,19 @@ import { Loader } from '../Loader/Loader';
               </Item>
             ))}
           </List>
+          {sortedWeatherData.length > 1 ?  <StyledArrowRight onClick={handleNextClick}/> : null}  
+
+      <Dots>
+        {sortedWeatherData.map((_, index) => (
+          <Dot
+            key={index}
+            active={index === activeIndex}
+            onClick={() => handleDotClick(index)}
+      
+          />
+        ))}
+      </Dots>
+      </BoxArrow>
           <Btn onClick={toggleModal}>
             <AiOutlinePlus size={'20px'} />
             Add trip
