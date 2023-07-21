@@ -108,8 +108,9 @@ useEffect(() => {
           filteredWeatherData={filteredWeatherData} 
         />
         <BoxLink>
+      
 
-        <Link to="https://vitalikn.github.io/trip-project" target="_blank">
+        <Link to="https://github.com/VitalikN/trip-project" target="_blank">
   <IconGithub/>
 </Link>
       <TitleDev>created by <span>&copy;</span> Vitaly Nozhenko</TitleDev> 
